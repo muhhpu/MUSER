@@ -1,10 +1,10 @@
-# MUSER: Multimodal User Sequence Explainable Recommendation
+# MUSER: Memory-Augmented Multimodal Sequential Recommendation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange)](https://pytorch.org/)
 
-This repository is the official implementation of the paper: **"MUSER: Multimodal User Sequence Explainable Recommendation"**.
+This repository is the official implementation of the paper: **"MUSER: Memory-Augmented Multimodal Sequential Recommendation"**.
 
 MUSER is a robust framework designed to leverage Multimodal Large Language Models (MLLMs) for 
 recommendation tasks. It integrates visual perception with textual reasoning to provide accurate 
