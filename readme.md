@@ -133,119 +133,34 @@ The following table summarizes the implementation details and hyperparameter con
 
 Notation: `d` denotes embedding dimension, `l` denotes learning rate, `b` denotes batch size, `L` denotes the number of layers or blocks, and `H` denotes the number of attention heads.
 
-| Category     | Model        | Key Hyperparameter Settings & Implementation Details                                                                            |
-| ------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| Seq & Search | GRU4Rec      | `d=64`, `l=1e-3`, `b=1024`, hidden units=128. Loss: BPR/Cross-Entropy. Optimizer: Adam.                                         |
-| Seq & Search | SASRec       | `d=64`, `l=1e-3`, `b=1024`, `L=2`, `H=1`, dropout=0.5, max_len=200. Positional Embedding: Learnable.                            |
-| Seq & Search | GRU4Rec_F    | Extends GRU4Rec. Visual features projected to `d` via MLP. Concatenation strategy: Early fusion.                                |
-| Seq & Search | SASRec_F     | Extends SASRec. Visual features projected to `d`. Fusion: Added to item embeddings before self-attention.                       |
-| Seq & Search | SIMTIER-MAKE | `d=64`, `l=1e-3`, `b=1024`. Hierarchical retrieval. Index size=1000, retrieve top-K=50.                                         |
-| Seq & Search | MUSE         | `d=64`, `l=5e-4`, `b=1024`, `L=2`. Multi-granularity intent extraction. Loss: BPR + Contrastive.                                |
-| Graph-based  | MMGCN        | `d=64`, `l=1e-3`, `b=1024`, GCN layers `L=2`. Aggregation: Mean/Max Pooling. Modalities: Visual + ID.                           |
-| Graph-based  | MGAT         | `d=64`, `l=5e-4`, `b=1024`, GAT layers `L=2`, heads `H=4`. Attention dropout=0.1.                                               |
-| Graph-based  | LGMRec       | `d=64`, `l=1e-3`, `b=1024`, LightGCN layers `L=3`. Modality dropout=0.1. Optimizer: Adam.                                       |
-| Graph-based  | EVEN         | `d=64`, `l=1e-3`. GCN layers `L=2`. Alignment regularization `lambda_align=1e-2`, temperature `tau=0.1`.                        |
-| MLLM-based   | LLaVA        | Zero-shot setting. Temperature=0.1, max_new_tokens=512. Prompt: "Recommend a video based on..." No training.                    |
-| MLLM-based   | TALLREC      | Backbone: LLaMA-7B. LoRA: `r=8`, `alpha=16`. `l=1e-4`, `b=128` with gradient accumulation. Epochs=3. Instruction tuning format. |
-| MLLM-based   | MLLM-MSR     | Backbone: LLaVA-1.6-7B. LoRA: `r=8`, `alpha=16`, targets=[q,k,v,o]. `l=2e-4`. Recurrent Summary Window=3.                       |
-| Explainable  | NRT          | `d=300` for word embeddings, `d_id=64`. GRU hidden=400. `l=1e-3`. Regularization weight `lambda=1e-4`.                          |
-| Explainable  | Attn2Seq     | `d=512`. Encoder: MLP. Decoder: LSTM with Attention. `l=1e-3`. User/item visual projection included.                            |
-| Explainable  | PETER        | `d=512`, `L=2`, `H=2`. `l=1e-4`. Masking: Peter-Mask. Loss: NLL for generation + CE for recommendation.                         |
-| Explainable  | XRec         | Backbone: LLaMA-7B with soft prompting or adapter. Prompt length=10. `l=1e-3` for adapters.                                     |
-
+| Model        | Key Hyperparameter Settings & Implementation Details                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| GRU4Rec      | `d=64`, `l=1e-3`, `b=1024`, hidden units=128. Loss: BPR/Cross-Entropy. Optimizer: Adam.                                         |
+| SASRec       | `d=64`, `l=1e-3`, `b=1024`, `L=2`, `H=1`, dropout=0.5, max_len=200. Positional Embedding: Learnable.                            |
+| GRU4Rec_F    | Extends GRU4Rec. Visual features projected to `d` via MLP. Concatenation strategy: Early fusion.                                |
+| SASRec_F     | Extends SASRec. Visual features projected to `d`. Fusion: Added to item embeddings before self-attention.                       |
+| SIMTIER-MAKE | `d=64`, `l=1e-3`, `b=1024`. Hierarchical retrieval. Index size=1000, retrieve top-K=50.                                         |
+| MUSE         | `d=64`, `l=5e-4`, `b=1024`, `L=2`. Multi-granularity intent extraction. Loss: BPR + Contrastive.                                |
+| MMGCN        | `d=64`, `l=1e-3`, `b=1024`, GCN layers `L=2`. Aggregation: Mean/Max Pooling. Modalities: Visual + ID.                           |
+| MGAT         | `d=64`, `l=5e-4`, `b=1024`, GAT layers `L=2`, heads `H=4`. Attention dropout=0.1.                                               |
+| LGMRec       | `d=64`, `l=1e-3`, `b=1024`, LightGCN layers `L=3`. Modality dropout=0.1. Optimizer: Adam.                                       |
+| EVEN         | `d=64`, `l=1e-3`. GCN layers `L=2`. Alignment regularization `lambda_align=1e-2`, temperature `tau=0.1`.                        |
+| LLaVA        | Zero-shot setting. Temperature=0.1, max_new_tokens=512. Prompt: "Recommend a video based on..." No training.                    |
+| TALLREC      | Backbone: LLaMA-7B. LoRA: `r=8`, `alpha=16`. `l=1e-4`, `b=128` with gradient accumulation. Epochs=3. Instruction tuning format. |
+| MLLM-MSR     | Backbone: LLaVA-1.6-7B. LoRA: `r=8`, `alpha=16`, targets=[q,k,v,o]. `l=2e-4`. Recurrent Summary Window=3.                       |
+| NRT          | `d=300` for word embeddings, `d_id=64`. GRU hidden=400. `l=1e-3`. Regularization weight `lambda=1e-4`.                          |
+| Attn2Seq     | `d=512`. Encoder: MLP. Decoder: LSTM with Attention. `l=1e-3`. User/item visual projection included.                            |
+| PETER        | `d=512`, `L=2`, `H=2`. `l=1e-4`. Masking: Peter-Mask. Loss: NLL for generation + CE for recommendation.                         |
+| XRec         | Backbone: LLaMA-7B with soft prompting or adapter. Prompt length=10. `l=1e-3` for adapters.                                     |
 ## 🧠 Algorithmic Details
 
 This section presents the algorithmic workflows of the two core agents in MUSER: the User Agent (UA) and the Recommendation Agent (RA). The UA evolves long-term and short-term user memory, while the RA consumes the evolved memory state for recommendation training and inference.
 
 ### User Agent Memory Evolution
-
-```latex
-\begin{algorithm}[htbp]
-\caption{User Agent (UA) Memory Evolution in MUSER}
-\label{alg:muser_ua}
-\SetAlgoLined
-\KwIn{User multimodal interaction batches $\mathcal{B} = \{B_0, B_1, \dots, B_T\}$}
-\KwOut{Evolved user memory state: $LTI_T$, $STI_T$, and personality parameter $P_\text{per}^{(T)}$}
-
-\textbf{Initialize:} $LTI_{-1} \gets \emptyset$, $STI_{-1} \gets \emptyset$, External Storage $P_\text{per} \gets \text{null}$\;
-
-\For{each temporal batch $t = 0, 1, \dots, T$}{
-    Extract multimodal features $(\mathcal{G}_t, \mathcal{T}_t)$ from current batch $B_t$\;
-    
-    \eIf{$t == 0$}{
-        \textit{\color{blue}// Phase: Cold-Start Encoder ($\Phi_{\text{enc}}$)}\;
-        $STI_0 \gets \Phi_{\text{enc}}(\mathcal{G}_0, \mathcal{T}_0)$\;
-        $LTI_0 \gets \emptyset$\;
-    }{
-        \eIf{$t == 1$}{
-            \textit{\color{blue}// Phase: Differential Initializer ($\Phi_{\text{init}}$)}\;
-            $STI_1, LTI_1, P_\text{per}^{(1)} \gets \Phi_{\text{init}}(STI_0, \mathcal{G}_1, \mathcal{T}_1)$\;
-            Save $P_\text{per}^{(1)}$ to External Storage\;
-        }{
-            \textit{\color{blue}// Phase: Parametric Evolution ($\Phi_{\text{evolve}}$)}\;
-            Retrieve $P_\text{per}^{(t-1)}$ from External Storage\;
-            
-            \textit{\color{purple}--- Step 1: Multimodal Perception ---}\;
-            $STI_t \gets \Phi_{\text{enc}}(\mathcal{G}_t, \mathcal{T}_t)$\;
-            
-            \textit{\color{purple}--- Step 2: Semantic Deviation \& Deterministic Update (ICP) ---}\;
-            $s_t \gets \text{LLM}_{\text{eval}}(STI_t, LTI_{t-1} \mid P_\text{per}^{(t-1)})$\;
-            $\mathcal{D}_t \gets (s_t - 3) / 4$\;
-            $\Delta p \gets \gamma (e^{\delta \mathcal{D}_t} - 1)$\;
-            $P_\text{per}^{(t)} \gets \text{Clip}(P_\text{per}^{(t-1)} + \Delta p, 0, 1)$\;
-            Save updated $P_\text{per}^{(t)}$ to External Storage\;
-            
-            \textit{\color{purple}--- Step 3: Structured Memory Operations ---}\;
-            $LTI_t \gets \text{Op}_{\text{mem}}(LTI_{t-1}, STI_t \mid P_\text{per}^{(t)})$\;
-        }
-    }
-}
-
-\Return{$LTI_T, STI_T, P_\text{per}^{(T)}$}
-\end{algorithm}
-```
+![User Agent (UA) Memory Evolution in MUSER](./algorithm1.png)
 
 ### Recommendation Agent Training and Inference
-
-```latex
-\begin{algorithm}[htbp]
-\caption{Recommendation Agent (RA) Training and Inference in MUSER}
-\label{alg:muser_ra}
-\SetAlgoLined
-\KwIn{Evolved UA memory state $\mathcal{M}_u^{(t)}=\{LTI_t, STI_t, P_\text{per}^{(t)}\}$; candidate multimodal features $(\mathcal{G}_{\text{candi}}, \mathcal{T}_{\text{candi}})$; teacher-generated target sequence $\mathcal{Y}_{tgt}=(\mathcal{A}_{gt}\oplus\mathcal{R}_{gt})$ for training}
-\KwOut{Trained RA parameters $\theta$ during training; predicted decision $\hat{\mathcal{A}}$ and rationale $\hat{\mathcal{R}}$ during inference}
-
-\textbf{Initialize:} Load student RA $\mathcal{M}_S$ with trainable LoRA parameters $\theta$\;
-
-\textit{\color{blue}// Phase: Memory-Aware Context Construction}\;
-Retrieve $\mathcal{M}_u^{(t)}=\{LTI_t, STI_t, P_\text{per}^{(t)}\}$ from UA\;
-$\mathcal{X}_{\text{ctx}} \gets \{LTI_t, STI_t, P_\text{per}^{(t)}, \mathcal{G}_{\text{candi}}, \mathcal{T}_{\text{candi}}\}$\;
-
-\eIf{\textbf{Training}}{
-    \textit{\color{blue}// Phase: Semantic Trajectory Distillation}\;
-    $\mathcal{Y}_{tgt} \gets \mathcal{A}_{gt} \oplus \mathcal{R}_{gt}$\;
-    $P_{\theta}(\cdot \mid \mathcal{X}_{\text{ctx}}) \gets \mathcal{M}_S(\mathcal{X}_{\text{ctx}})$\;
-    $\mathcal{L}_{a} \gets -\log P_{\theta}(\mathcal{A}_{gt} \mid \mathcal{X}_{\text{ctx}})$\;
-    $\mathcal{L}_{r} \gets -\frac{1}{m}\sum_{k=1}^{m}\log P_{\theta}(r_k \mid r_{<k}, \mathcal{X}_{\text{ctx}}, \mathcal{A}_{gt})$\;
-
-    \textit{\color{blue}// Phase: Dual Consistency Regularization}\;
-    $S_r \gets e^{-\mathcal{L}_r}$, \quad $S_a \gets e^{-\mathcal{L}_a}$\;
-    $R \gets S_r / S_a$\;
-    $C_a \gets S_r(1-S_a)\cdot \mathbb{I}[R>\tau_h]$\;
-    $C_r \gets (1-S_r)S_a\cdot \mathbb{I}[R<\tau_l]$\;
-    $\mathcal{L}_{total} \gets (1+C_a)\mathcal{L}_a + (1+C_r)\mathcal{L}_r$\;
-    $\theta \gets \theta - \eta\nabla_{\theta}\mathcal{L}_{total}$\;
-
-    \Return{$\theta$}
-}{
-    \textit{\color{blue}// Phase: Autoregressive Recommendation Inference}\;
-    $\hat{\mathcal{Y}} \gets \text{LLM}_{\text{dec}}(\mathcal{X}_{\text{ctx}})$\;
-    $(\hat{\mathcal{A}}, \hat{\mathcal{R}}) \gets \text{Parse}(\hat{\mathcal{Y}})$\;
-
-    \Return{$\hat{\mathcal{A}}, \hat{\mathcal{R}}$}
-}
-\end{algorithm}
-```
+![Recommendation Agent (RA) Training and Inference in MUSER](./algorithm2.png)
 
 ## 📌 Notes
 
