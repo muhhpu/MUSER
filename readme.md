@@ -162,6 +162,16 @@ This section presents the algorithmic workflows of the two core agents in MUSER:
 ### Recommendation Agent Training and Inference
 ![Recommendation Agent (RA) Training and Inference in MUSER](./algorithm2.png)
 
+### GPTScore Evaluation
+
+For RQ2, we use GPTScore to evaluate the semantic quality of generated explanations. To make the LLM-as-judge protocol transparent, we use GPT-4o-2024-08-06 through the OpenAI API with temperature set to 0. For each test instance, the model-generated rationale and the ground-truth rationale are provided to a fixed judge prompt.
+
+The judge scores each explanation from five aspects: semantic alignment, factual faithfulness, preference grounding, specificity and insight, and coherence/fluency. Each aspect is assigned a score from 1 to 5. We first average the five aspect scores for each instance, normalize the result to \([0,1]\) by \((s_i - 1) / 4\), and then average the normalized scores over all test samples to obtain the final dataset-level GPTScore.
+
+Therefore, a reported value such as 0.8427 is the average normalized GPTScore over the full test set, rather than a single direct score produced by GPT-4.
+
+Please see `gptscore_judge.py` for the detailed implementation and the full judge prompt.
+
 ## 📌 Notes
 
 * The appendix provides additional implementation details, algorithmic descriptions, and qualitative analyses.
