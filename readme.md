@@ -310,6 +310,20 @@ Our output receives an approximate normalized GPTScore of **0.85**. This score i
 
 [16] Qiyao Ma, Xubin Ren, and Chao Huang. 2024. XRec: Large Language Models for Explainable Recommendation. Findings of the Association for Computational Linguistics. 391--402.
 
+## Citation
 
-```
+If you find this work useful, please cite:
+
+```bibtex
+@inproceedings{cao2026muser,
+  author    = {Cao, Ziyi and Liu, Rui and Lin, Jiajun},
+  title     = {MUSER: Memory-Augmented Multimodal Sequential Recommendation},
+  booktitle = {Proceedings of the 35th ACM International Conference on Information and Knowledge Management},
+  year      = {2026},
+  pages     = {},
+  publisher = {ACM},
+  address   = {Rome, Italy},
+  doi       = {10.1145/3799682.3841142},
+  isbn      = {979-8-4007-2539-5}
+}
 ```
